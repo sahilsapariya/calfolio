@@ -1,14 +1,22 @@
 # Getting started with Calfolio backend
 
+
+### Install dependencies
+
+#### Create DB in postgres
+
+1. login to postgres
+2. create a database named `calfolio`
+
+```
+CREATE DATABASE calfolio;
+```
+
 ### Clone the repo
 
 ```bash
 git clone https://github.com/sahilsapariya/calfolio.git
-```
 
-### Install dependencies
-
-```bash
 cd calfolio
 
 mvn clean install
