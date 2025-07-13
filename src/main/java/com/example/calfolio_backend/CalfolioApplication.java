@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CalfolioApplication {
 
-    @GetMapping("/hello")
+    @GetMapping("/check")
     public String check() {
-        return "Hello World";
+        return "Calfolio Backend is running!";
     }
 
     public static void main(String[] args) {
