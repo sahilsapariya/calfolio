@@ -2,9 +2,11 @@ package com.example.calfolio_backend.service.impl;
 
 import com.example.calfolio_backend.dto.BlogDto;
 import com.example.calfolio_backend.entity.Blog;
+import com.example.calfolio_backend.entity.User;
 import com.example.calfolio_backend.exception.ResourceNotFoundException;
 import com.example.calfolio_backend.repository.BlogRepository;
 import com.example.calfolio_backend.service.BlogService;
+import com.example.calfolio_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.util.List;
 public class BlogServiceImpl implements BlogService {
 
     private final BlogRepository blogRepository;
+    private final UserService userService;
 
     @Override
     public Blog createBlog(BlogDto blogDTO) throws IOException {
@@ -26,17 +29,21 @@ public class BlogServiceImpl implements BlogService {
             encodedImage = Base64.getEncoder().encodeToString(bytes);
         }
 
+        User author = userService.getUserById(blogDTO.getAuthorId());
+        if (author == null) {
+            throw new ResourceNotFoundException("Author not found with id: " + blogDTO.getAuthorId());
+        }
+
         Blog blog = Blog.builder()
                 .title(blogDTO.getTitle())
                 .content(blogDTO.getContent())
-                .authorId(blogDTO.getAuthorId())
+                .author(author)
                 .status(blogDTO.getStatus())
                 .photoBase64(encodedImage)
                 .build();
 
         return blogRepository.save(blog);
     }
-
 
     @Override
     public Blog getBlogById(Long id) {
@@ -58,7 +65,6 @@ public class BlogServiceImpl implements BlogService {
             throw new ResourceNotFoundException("No photo found for blog with id: " + id);
         }
 
-        // You can adjust MIME type dynamically or hardcode if known
         String mimeType = "image/jpeg"; // or "image/png"
         return "data:" + mimeType + ";base64," + base64;
     }
@@ -67,9 +73,13 @@ public class BlogServiceImpl implements BlogService {
     public Blog updateBlog(Long id, BlogDto blogDto) throws IOException {
         Blog existingBlog = getBlogById(id);
 
+        // Optional: Allow only admin to update
+        if (!existingBlog.getAuthor().getRole().equalsIgnoreCase("admin")) {
+            throw new RuntimeException("Only admin can update the blog");
+        }
+
         existingBlog.setTitle(blogDto.getTitle());
         existingBlog.setContent(blogDto.getContent());
-        existingBlog.setAuthorId(blogDto.getAuthorId());
         existingBlog.setStatus(blogDto.getStatus());
 
         if (blogDto.getPhoto() != null && !blogDto.getPhoto().isEmpty()) {
@@ -87,8 +97,12 @@ public class BlogServiceImpl implements BlogService {
 
         if (patchDto.getTitle() != null) existingBlog.setTitle(patchDto.getTitle());
         if (patchDto.getContent() != null) existingBlog.setContent(patchDto.getContent());
-        if (patchDto.getAuthorId() != null) existingBlog.setAuthorId(patchDto.getAuthorId());
         if (patchDto.getStatus() != null) existingBlog.setStatus(patchDto.getStatus());
+
+        if (patchDto.getAuthorId() != null) {
+            User author = userService.getUserById(patchDto.getAuthorId());
+            existingBlog.setAuthor(author);
+        }
 
         if (patchDto.getPhoto() != null && !patchDto.getPhoto().isEmpty()) {
             byte[] bytes = patchDto.getPhoto().getBytes();

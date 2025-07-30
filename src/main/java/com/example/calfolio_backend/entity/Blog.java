@@ -24,9 +24,10 @@ public class Blog {
     @JsonProperty("content")
     private String content;
 
-    @Column(name = "author_id", nullable = false)
     @JsonProperty("author_id")
-    private Long authorId;
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
+    private User author;
 
     @Column(name = "status")
     @JsonProperty("status")
