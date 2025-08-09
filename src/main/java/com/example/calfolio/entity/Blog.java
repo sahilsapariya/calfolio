@@ -34,7 +34,7 @@ public class Blog {
     private String status;
 
     @Lob
-    @Column(name = "photo_base64", columnDefinition = "TEXT")
+    @Column(name = "photo_base64", columnDefinition = "LONGBLOB")
     @JsonProperty("photo")
     private String photoBase64;
 }
