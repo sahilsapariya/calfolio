@@ -37,4 +37,8 @@ public class Calculator {
     @Column(name = "status")
     @JsonProperty("status")
     private String status;
+
+    @Column(name = "description", columnDefinition = "TEXT", nullable = true)
+    @JsonProperty("description")
+    private String description;
 }
