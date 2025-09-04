@@ -20,7 +20,8 @@ public class Blog {
     @JsonProperty("title")
     private String title;
 
-    @Column(name = "content", nullable = false)
+    @Lob
+    @Column(name = "content", nullable = false, columnDefinition = "LONGTEXT")
     @JsonProperty("content")
     private String content;
 

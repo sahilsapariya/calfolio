@@ -24,7 +24,7 @@ public class FinComic {
     private String name;
 
     @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "LONGTEXT")
     @JsonProperty("description")
     private String description;
 

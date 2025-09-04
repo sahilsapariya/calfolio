@@ -2,9 +2,6 @@ package com.example.calfolio.entity;
 
 import java.util.Map;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
@@ -29,7 +26,6 @@ public class Calculator {
     @JsonProperty("calc_type")
     private String calcType;
 
-    @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "json")
     @JsonProperty("calc_formula")
     private Map<String, Object> calcFormula;    
@@ -38,7 +34,7 @@ public class Calculator {
     @JsonProperty("status")
     private String status;
 
-    @Column(name = "description", columnDefinition = "TEXT", nullable = true)
+    @Column(name = "description", columnDefinition = "LONGTEXT", nullable = true)
     @JsonProperty("description")
     private String description;
 }

@@ -29,6 +29,6 @@ public class FinTerm {
     private String name;
 
     @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
 }
