@@ -6,6 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping("/api/calculators")
@@ -36,6 +40,15 @@ public class CalculatorController {
         Calculator saved = service.save(calculator);
         return ResponseEntity.ok(saved);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Calculator> update(
+            @PathVariable Long id,
+            @RequestBody Calculator calculator) {
+        Calculator updatedCalculator = service.update(id, calculator);
+        return ResponseEntity.ok(updatedCalculator);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

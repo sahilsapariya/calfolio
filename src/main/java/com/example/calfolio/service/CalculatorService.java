@@ -29,6 +29,20 @@ public class CalculatorService {
         Calculator saved = repository.save(calculator);
         return saved;
     }
+
+    public Calculator update(Long id, Calculator calculatorRequest) {
+        Calculator existingCalculator = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Calculator not found with id " + id));
+
+        // Update fields
+        existingCalculator.setCalcName(calculatorRequest.getCalcName());
+        existingCalculator.setCalcType(calculatorRequest.getCalcType());
+        existingCalculator.setCalcFormula(calculatorRequest.getCalcFormula());
+        existingCalculator.setStatus(calculatorRequest.getStatus());
+        existingCalculator.setDescription(calculatorRequest.getDescription());
+
+        return repository.save(existingCalculator);
+    }
     
 
     public void delete(Long id) {
